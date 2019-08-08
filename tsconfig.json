@@ -1,7 +1,7 @@
 {
    "compilerOptions": {
       "target": "esnext",
-      "baseUrl": "src/",
+      "baseUrl": "src",
       "module": "commonjs",
       "moduleResolution": "node",
       "outDir": "./build",

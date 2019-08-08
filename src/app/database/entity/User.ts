@@ -57,6 +57,7 @@ export class User {
   }
 
   checkIfUnencryptedPasswordIsValid(unencryptedPassword: string): boolean {
+    if (!this.password) throw new Error('Model without password')
     return bcrypt.compareSync(unencryptedPassword, this.password)
   }
 
