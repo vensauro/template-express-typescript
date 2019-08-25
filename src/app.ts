@@ -4,6 +4,7 @@ import 'reflect-metadata'
 import * as Sentry from '@sentry/node'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
+import * as helmet from 'helmet'
 import * as validate from 'express-validation'
 import { createConnection } from 'typeorm'
 import * as Youch from 'youch'
@@ -46,6 +47,7 @@ class App {
 
   private middlewares(): void {
     this.express.use(bodyParser.json())
+    this.express.use(helmet())
   }
 
   private routes(): void {
