@@ -1,9 +1,8 @@
-import { User } from 'app/database/entity/User'
 import { Request, Response } from 'express'
 import * as Joi from 'joi'
-import { getRepository } from 'typeorm'
+import { User } from 'models/database/entity'
 
-class AuthController {
+class LoginController {
   loginValidator = {
     body: {
       email: Joi.string().required(),
@@ -14,18 +13,16 @@ class AuthController {
   async login(req: Request, res: Response): Promise<Response> {
     const { email, password } = req.body
 
-    const userRepository = getRepository(User)
-
-    const user = await userRepository.findOne({
+    const user = await User.repository().findOne({
       where: { email: email },
       select: ['id', 'username', 'email', 'password', 'role']
     })
 
-    if (!user) return res.status(404).json({ error: 'Resource not found' })
-
-    if (!user.checkIfUnencryptedPasswordIsValid(password)) {
+    if (!user)
       return res.status(401).json({ error: 'Incorrect email or password' })
-    }
+
+    if (!user.checkIfUnencryptedPasswordIsValid(password))
+      return res.status(401).json({ error: 'Incorrect email or password' })
 
     const token = user.generateToken()
 
@@ -43,4 +40,4 @@ class AuthController {
   }
 }
 
-export default new AuthController()
+export default new LoginController()

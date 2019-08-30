@@ -1,7 +1,6 @@
-import { User } from 'app/database/entity/User'
 import { Request, Response } from 'express'
 import * as Joi from 'joi'
-import { getRepository } from 'typeorm'
+import { User } from 'models/database/entity'
 
 class UserController {
   saveValidator = {
@@ -26,10 +25,8 @@ class UserController {
     const { username, email, password } = req.body
     const user = new User({ username, email, password })
 
-    const userRepository = getRepository(User)
-
     try {
-      const { id, username, email, role } = await userRepository.save(user)
+      const { id, username, email, role } = await User.repository().save(user)
       return res.status(201).json({ id, username, email, role })
     } catch (err) {
       return res.status(409).json({ error: 'User already exists' })
@@ -39,23 +36,39 @@ class UserController {
   async remove(req: Request, res: Response): Promise<Response> {
     const { id } = res.locals.jwtPayload.user
 
-    const userRepository = getRepository(User)
+    const userToRemove = await User.repository().findOneOrFail(id)
+    const {
+      username,
+      email,
+      role,
+      created_at,
+      updated_at
+    } = await User.repository().remove(userToRemove)
+    return res
+      .status(200)
+      .json({ id, email, role, username, created_at, updated_at })
+  }
 
-    try {
-      const userToRemove = await userRepository.findOneOrFail(id)
-      const {
-        username,
-        email,
-        role,
-        created_at,
-        updated_at
-      } = await userRepository.remove(userToRemove)
-      return res
-        .status(200)
-        .json({ id, email, role, username, created_at, updated_at })
-    } catch (error) {
-      return res.status(404).json({ error: 'Resource not found' })
+  updateValidator = {
+    body: {
+      username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required()
     }
+  }
+
+  async update(req: Request, res: Response): Promise<Response> {
+    const { id } = res.locals.jwtPayload.user
+    const { username } = req.body
+
+    const user = await User.repository().findOneOrFail(id)
+    user.username = username
+
+    User.repository().save(user)
+
+    return res.status(201).json(user)
   }
 }
 

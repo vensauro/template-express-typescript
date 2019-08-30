@@ -6,7 +6,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  getRepository,
   PrimaryGeneratedColumn,
+  Repository,
   UpdateDateColumn
 } from 'typeorm'
 
@@ -46,8 +48,12 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date
 
-  constructor(user: Partial<User>) {
+  constructor(user?: Partial<User>) {
     Object.assign(this, user)
+  }
+
+  static repository(): Repository<User> {
+    return getRepository(User)
   }
 
   @BeforeInsert()

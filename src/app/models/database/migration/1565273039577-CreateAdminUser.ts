@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MigrationInterface, QueryRunner, getRepository } from 'typeorm'
+import { MigrationInterface, QueryRunner } from 'typeorm'
+
 import { User, UserRole } from '../entity/User'
 
 export class CreateAdminUser1565273039577 implements MigrationInterface {
@@ -10,11 +11,11 @@ export class CreateAdminUser1565273039577 implements MigrationInterface {
       email: 'admin@admin.com',
       role: UserRole.ADMIN
     })
-    await getRepository(User).save(admin)
+    await User.repository().save(admin)
   }
 
   async down(queryRunner: QueryRunner): Promise<any> {
-    const userRepository = getRepository(User)
+    const userRepository = User.repository()
     const admin = await userRepository.find({
       email: 'admin@admin.com'
     })

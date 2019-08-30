@@ -1,5 +1,6 @@
 // @create-index
 
 export { default as AdminController } from './AdminController'
-export { default as AuthController } from './AuthController'
+export { default as LoginController } from './LoginController'
+export { default as PasswordController } from './PasswordController'
 export { default as UserController } from './UserController'

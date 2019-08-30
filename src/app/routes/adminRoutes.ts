@@ -1,9 +1,9 @@
-import { AdminController } from 'app/controllers'
+import { AdminController } from 'controllers'
 import { Router } from 'express'
-import { checkJwt, checkRole } from 'app/middlewares'
+import { checkJwt, checkRole } from 'middlewares'
 import * as asyncHandler from 'express-async-handler'
 import * as validate from 'express-validation'
-import { UserRole } from 'app/database/entity/User'
+import { UserRole } from 'models/database/entity'
 
 const router = Router()
 

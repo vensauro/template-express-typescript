@@ -1,5 +1,5 @@
-import { UserController } from 'app/controllers'
-import { checkJwt } from 'app/middlewares'
+import { UserController } from 'controllers'
+import { checkJwt } from 'middlewares'
 import { Router } from 'express'
 import * as asyncHandler from 'express-async-handler'
 import * as validate from 'express-validation'
@@ -14,5 +14,13 @@ router.post(
 )
 // delete loged user
 router.delete('/', checkJwt, asyncHandler(UserController.remove))
+
+// update username and other resources about the user
+router.put(
+  '/',
+  checkJwt,
+  validate(UserController.updateValidator),
+  asyncHandler(UserController.update)
+)
 
 export default router

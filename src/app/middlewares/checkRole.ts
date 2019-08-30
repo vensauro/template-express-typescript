@@ -1,6 +1,5 @@
-import { Response, NextFunction, RequestHandler } from 'express'
-
-import { UserRole } from 'app/database/entity/User'
+import { NextFunction, RequestHandler, Response } from 'express'
+import { UserRole } from 'models/database/entity'
 
 export function checkRole(roles: UserRole[]): RequestHandler {
   return async function(

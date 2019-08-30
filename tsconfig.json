@@ -1,12 +1,24 @@
 {
    "compilerOptions": {
       "target": "esnext",
-      "baseUrl": "src",
+      "baseUrl": "src/app",
       "module": "commonjs",
       "moduleResolution": "node",
       "outDir": "./build",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "sourceMap": true
-   }
+      "sourceMap": true,
+      "plugins": [
+         {
+            "transform": "ts-transformer-imports"
+         }
+      ]
+   },
+   "include": [
+      "src/**/*"
+   ],
+   "exclude": [
+      "node_modules",
+      "**/*.test.ts"
+   ]
 }

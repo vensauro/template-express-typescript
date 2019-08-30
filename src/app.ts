@@ -4,8 +4,8 @@ import 'reflect-metadata'
 import * as Sentry from '@sentry/node'
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
-import * as helmet from 'helmet'
 import * as validate from 'express-validation'
+import * as helmet from 'helmet'
 import { createConnection } from 'typeorm'
 import * as Youch from 'youch'
 
@@ -16,7 +16,7 @@ class App {
 
   private isDev: boolean
 
-  private constructor() {
+  constructor() {
     this.express = express()
     this.isDev = process.env.NODE_ENV !== 'production'
 
@@ -30,11 +30,11 @@ class App {
     return this.express
   }
 
-  static async init(): Promise<express.Application> {
+  static async init(): Promise<App> {
     try {
       await createConnection()
       const app = new App()
-      return app.express
+      return app
     } catch (e) {
       console.error(e)
       console.error("Can't connect with database")
@@ -66,6 +66,10 @@ class App {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       next: express.NextFunction
     ) => {
+      console.log(err)
+      if (err.name === 'EntityNotFound') {
+        return res.status(404).json({ error: 'Resource not found' })
+      }
       if (err instanceof validate.ValidationError) {
         validate.options({
           status: 422,
