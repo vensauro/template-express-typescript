@@ -58,7 +58,7 @@
     "nodemailer": "^6.3.0",
     "nodemailer-pug-engine": "^1.0.1",
     "reflect-metadata": "^0.1.10",
-    "typeorm": "0.2.18",
+    "typeorm": "0.2.25",
     "youch": "^2.0.10"
   },
   "scripts": {
